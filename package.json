@@ -1,25 +1,23 @@
 {
-  "name": "react-express-docker-boilerplate",
+  "name": "react-static-app-boilerplate",
   "version": "1.0.0",
-  "description": "Boilerplate for React-Express app with testing framework and Docker integration",
-  "main": "src/server/app.js",
+  "description": "A boilerplate for simple static react app",
+  "main": "",
   "scripts": {
-    "start": "npm run build:prod && node ./dist/server/app.js",
-    "dev": "concurrently 'npm run build:client:dev' 'npm run build:server:dev' 'nodemon ./dist/server/app.js'",
-    "dev:client": "webpack-dev-server",
-    "build:prod": "npm run build:server && npm run build:client",
-    "build:client": "webpack --config webpack.prod.config.js --profile --colors",
-    "build:client:dev": "webpack --config webpack.config.js --profile --colors --watch",
-    "build:server": "babel src -d dist --copy-files --ignore '**/*.test.js'",
-    "build:server:dev": "babel src -d dist --copy-files --ignore '**/*.test.js' --watch",
+    "deploy": "",
+    "deploy:dev": "",
+    "postdeploy": "",
+    "start": "webpack-dev-server --open",
+    "build": "webpack --config webpack.prod.config.js --profile --colors",
     "test": "jest --coverage && standard",
+    "test:ci": "jest --coverage --ci --updateSnapshot && standard",
     "test:watch": "jest --watch",
-    "standard": "standard",
-    "standard:fix": "standard --fix"
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MisaOgura/react-express-docker-boilerplate.git"
+    "url": ""
   },
   "keywords": [
     "javascript",
@@ -34,16 +32,27 @@
   "author": "Misa Ogura",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MisaOgura/react-express-docker-boilerplate/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/MisaOgura/react-express-docker-boilerplate#readme",
+  "homepage": "",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "classnames": "^2.2.5",
+    "history": "^4.7.2",
+    "localforage": "^1.5.3",
+    "lodash": "^4.17.4",
+    "prop-types": "^15.6.0",
     "react": "^16.0.0",
+    "react-bootstrap": "^0.31.5",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "redux": "^3.7.2"
   },
   "devDependencies": {
+    "autoprefixer": "^7.2.2",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-jest": "^20.0.3",
@@ -52,21 +61,27 @@
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.16",
     "concurrently": "^3.5.0",
+    "copy-webpack-plugin": "^4.3.1",
+    "css-loader": "^0.28.7",
     "enzyme": "^3.1.0",
     "enzyme-adapter-react-16": "^1.0.1",
     "express": "^4.15.4",
+    "extract-text-webpack-plugin": "^3.0.2",
     "html-webpack-plugin": "^2.30.1",
     "jest": "^20.0.4",
     "nodemon": "^1.11.0",
+    "postcss-flexbugs-fixes": "^3.2.0",
+    "postcss-loader": "^2.0.9",
     "react-test-renderer": "^16.0.0",
     "standard": "^10.0.3",
+    "style-loader": "^0.19.0",
     "supertest": "^3.0.0",
     "webpack": "^3.5.3",
     "webpack-dev-server": "^2.8.2"
   },
   "jest": {
-    "testPathIgnorePatterns": [
-      "dist/"
+    "coveragePathIgnorePatterns": [
+      "./src/shim.js"
     ],
     "setupFiles": [
       "<rootDir>/src/shim.js",
@@ -75,6 +90,7 @@
   },
   "standard": {
     "globals": [
+      "jest",
       "describe",
       "context",
       "before",
@@ -82,7 +98,13 @@
       "after",
       "afterEach",
       "it",
-      "expect"
+      "expect",
+      "beforeAll"
     ]
-  }
+  },
+  "browserslist": [
+    "> 5%",
+    "last 10 versions",
+    "not ie < 9"
+  ]
 }

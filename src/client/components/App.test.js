@@ -1,13 +1,13 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
-import { HelloWorld } from '../components/helloWorld'
+import App from './App'
 
-describe('HelloWorld', () => {
+describe('App', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallow(<HelloWorld />)
+    wrapper = shallow(<App />)
   })
 
   it('has the correct class name', () => {
