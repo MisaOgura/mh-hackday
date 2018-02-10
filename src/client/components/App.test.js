@@ -4,17 +4,21 @@ import { shallow } from 'enzyme'
 import App from './App'
 
 describe('App', () => {
-  let wrapper
+  let app
 
   beforeEach(() => {
-    wrapper = shallow(<App />)
+    app = shallow(<App />)
   })
 
   it('has the correct class name', () => {
-    expect(wrapper.hasClass('hello-world')).toBe(true)
+    expect(app.hasClass('hello-world')).toBe(true)
   })
 
   it('renders the correct message', () => {
-    expect(wrapper.text()).toContain('Hello world!')
+    expect(app.text()).toContain('An awesome static app boilerplate')
+  })
+
+  it('displays the react logo', () => {
+    expect(app.find('.react-logo').exists()).toBe(true)
   })
 })

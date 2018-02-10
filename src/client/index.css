@@ -1,0 +1,16 @@
+#app {
+    width: 30%;
+    margin: auto;
+    text-align: center;
+}
+
+.hello-world {
+    font-family: Tahoma;
+    font-size: 18px;
+    margin-top: 40px;
+}
+
+.react-logo {
+    margin-top: 10px;
+    width: 50%;
+}
