@@ -54,7 +54,7 @@ module.exports = {
         test: /\.jsx?$/,
         loaders: 'babel-loader',
         query: {
-          presets: ['react', 'stage-2', 'env']
+          presets: ['react', 'stage-3', 'env']
         },
         include: path.join(__dirname, 'src'),
         exclude: /node_modules/
