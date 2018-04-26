@@ -6,7 +6,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const cssFilename = 'static/css/[name].[contenthash:8].css'
-const extractTextPluginOptions = { publicPath: Array(cssFilename.split('/').length).join('../') }
+const extractTextPluginOptions = {
+  publicPath: Array(cssFilename.split('/').length).join('../')
+}
 
 const plugins = [
   new CleanWebpackPlugin(['build/js'], {

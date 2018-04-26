@@ -7,7 +7,7 @@
 1. Make sure you have `node` and `npm` installed, if not refer to below.
     - Mac users: https://changelog.com/posts/install-node-js-with-homebrew-on-os-x
     - Windows users: http://blog.teamtreehouse.com/install-node-js-npm-windows
-    
+
 2. Alternatively, use [yarn](https://yarnpkg.com/en/) for faster dependency installation
     and more stable dependency management. You can use `yarn` in the place of `npm`.
     ```
@@ -18,7 +18,7 @@
     $ npm install
     ```
     - Instructions for installation: https://yarnpkg.com/lang/en/docs/install/
-    
+
 3. Clone the repository.
     - Using SSH (recommended):
     ```
@@ -28,7 +28,7 @@
     ```
     $ git clone https://github.com/MisaOgura/react-static-app-boilerplate.git
     ```
-    
+
 4. Move into the cloned directory.
     ```
     $ cd react-static-app-boilerplate
@@ -38,12 +38,12 @@
     ```
     $ npm/yarn install
     ```
-    
+
 6. Run the app locally in a _development_ mode.
     ```
     $ npm/yarn start
     ```
-    
+
 This should automatically open up a window in a browser. If not, visit
 `http://localhost:8080/`: you should see a `hello world` message.
 
@@ -61,9 +61,9 @@ and coverage report.
 2. Run all the tests once.
     ```
     $ npm/yarn test
-    ``` 
-    - Also runs `standard` ([JavaScript Standard Style](https://standardjs.com/)) at the end to highlight any
-    linting errors.
+    ```
+    - Also runs `standard` ([JavaScript Standard Style](https://standardjs.com/))
+    at the end to highlight any linting errors.
 
 3. Run tests in a watch mode.
     ```
