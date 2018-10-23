@@ -1,0 +1,73 @@
+
+const MAJOR_CHORDS = {
+  'C': [ 'C', 'E', 'G'],
+  'C#': [ 'C#', 'F','G#'],
+  'D': [ 'D', 'F#', 'A'],
+  'D#': [ 'D#', 'G', 'A#'],
+  'E': [ 'E', 'G#', 'B'],
+  'F': ['F', 'A', 'C'],
+  'F#': [ 'F#', 'A#', 'C#'],
+  'G': [ 'G', 'B', 'D'],
+  'G#': ['G#', 'C', 'D#'],
+  'A': [ 'A', 'C#', 'E'],
+  'A#': [ 'A#', 'D', 'F'],
+  'B': ['B', 'D#', 'F#']
+};
+
+const MINOR_CHORDS = {
+  'C': ['C', 'D#', 'G'],
+  'C#': ['C#', 'E', 'G#'],
+  'D': ['D', 'F', 'A'],
+  'D#': ['D#', 'F#', 'A#'],
+  'E': ['E', 'G', 'B'],
+  'F': ['F', 'G#', 'C'],
+  'F#': ['F#', 'A', 'C#'],
+  'G': [ 'G', 'A#', 'D'],
+  'G#': ['G#', 'B', 'D#'],
+  'A': ['A', 'C', 'E'],
+  'A#': ['A#', 'C#', 'F'],
+  'B': ['B', 'D', 'F#']
+};
+
+const MAJOR_CYCLE = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F'];
+
+const MINOR_CYCLE = ['A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F', 'C', 'G', 'D'];
+
+const MIDDLE_C = 440 * Math.pow( Math.pow( 2, 1 / 12 ), -9 );
+
+const OCTAVE_OFFSET=4;
+
+const getFrequency = function( name ) {
+  var couple = name.split(/(\d+)/),
+      distance = MAJOR_CYCLE.indexOf(couple[ 0 ]),
+      octaveDiff = ( couple[ 1 ] || OCTAVE_OFFSET ) - OCTAVE_OFFSET,
+      freq = MIDDLE_C * Math.pow( Math.pow( 2, 1 / 12 ), distance );
+  return freq * Math.pow( 2, octaveDiff );
+};
+
+
+const MIN_X = 0;
+const MAX_X = 300;
+const MIN_Y = 0;
+const MAX_Y =  210;
+const MIN_HEIGHT = 20;
+const MAX_HEIGHT = 200;
+
+export class Drone {
+  constructor() {
+    this.frequencies = [];
+    this.amplitudes = [];
+  }
+
+  start() {
+    
+  }
+
+  update(x, y, width, height) {
+    console.log("in here");
+    const intensity = (height - MIN_HEIGHT) / MAX_HEIGHT;
+    const normX = (x - MIN_X) / MAX_X;
+    const normY = (x - MIN_Y) / MAX_Y;
+    console.log(intensity, normX, normY);
+  }
+}
