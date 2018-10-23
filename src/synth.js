@@ -47,15 +47,8 @@ const getFrequency = function( name ) {
   return freq * Math.pow( 2, octaveDiff );
 };
 
-
-const MIN_X = 0;
-const MAX_X = 300;
-const MIN_Y = 0;
-const MAX_Y =  210;
-const MIN_HEIGHT = 20;
-const MAX_HEIGHT = 200;
-
 export class Drone {
+
   constructor() {
     this.oscillators = [];
     this.gains = [];
@@ -68,7 +61,7 @@ export class Drone {
   }
 
 
-  update(x, y, width, height) {
+  update(normX, normY, intensity) {
     while(this.gains.length) {
       const gain = this.gains.shift();
       const oscillator = this.oscillators.shift();
@@ -77,9 +70,6 @@ export class Drone {
       oscillator.disconnect();
       gain.disconnect();
     }
-    const intensity = (height - MIN_HEIGHT) / MAX_HEIGHT;
-    const normX = (x - MIN_X) / MAX_X;
-    const normY = (x - MIN_Y) / MAX_Y;
     //const angle = Math.atan((normY-0.5)/(normX-0.5));
     //const r = Math.sqrt(Math.pow(normX, 2) + Math.pow(normY, 2));
     const scalePosition = normX * 11;
@@ -97,7 +87,7 @@ export class Drone {
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime(getFrequency(note + '4'), this.audioCtx.currentTime);
       oscillator.connect(gain);
-      gain.gain.value = 1;
+      gain.gain.value = 0.001;
       gain.connect(this.audioCtx.destination);
       oscillator.start();
       this.oscillators.push(oscillator);
@@ -112,7 +102,7 @@ export class Drone {
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime(getFrequency(note + '3'), this.audioCtx.currentTime);
       oscillator.connect(gain);
-      gain.gain.value = 1;
+      gain.gain.value = 0.001;
       gain.connect(this.audioCtx.destination);
       oscillator.start();
       this.oscillators.push(oscillator);
@@ -127,7 +117,7 @@ export class Drone {
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime(getFrequency(note + '4'), this.audioCtx.currentTime);
       oscillator.connect(gain);
-      gain.gain.value = 1;
+      gain.gain.value = 0.001;
       gain.connect(this.audioCtx.destination);
       oscillator.start();
       this.oscillators.push(oscillator);
@@ -142,7 +132,7 @@ export class Drone {
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime(getFrequency(note + '3'), this.audioCtx.currentTime);
       oscillator.connect(gain);
-      gain.gain.value = 1;
+      gain.gain.value = 0.001;
       gain.connect(this.audioCtx.destination);
       oscillator.start();
       gain.gain.exponentialRampToValueAtTime(chord2Mix * minorMix * intensity, this.audioCtx.currentTime + 1);

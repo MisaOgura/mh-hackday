@@ -9,6 +9,12 @@ import { Drone } from './synth';
 
 import App from './components/App';
 
+const MIN_X = 0;
+const MAX_X = 300;
+const MIN_Y = 0;
+const MAX_Y =  210;
+const MIN_HEIGHT = 20;
+const MAX_HEIGHT = 200;
 render(
   <App />,
   document.getElementById('app')
@@ -27,7 +33,10 @@ window.onload = function() {
   tracker.on('track', function(event) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     event.data.forEach(function(rect) {
-      syn.update(rect.x, rect.y, rect.width, rect.height);
+      const intensity = (rect.height - MIN_HEIGHT) / MAX_HEIGHT;
+      const normX = (rect.x - MIN_X) / MAX_X;
+      const normY = (rect.y - MIN_Y) / MAX_Y;
+      syn.update(normX, normY, intensity);
       context.strokeStyle = '#a64ceb';
       context.strokeRect(rect.x, rect.y, rect.width, rect.height);
       context.font = '11px Helvetica';
