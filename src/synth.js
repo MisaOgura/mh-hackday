@@ -60,15 +60,33 @@ export class Drone {
     // create Oscillator node
   }
 
+  _makeOscillators(chord, intensity, octave, output) {
+    for(const i in chord) {
+      const note = chord[i];
+      var oscillator = this.audioCtx.createOscillator();
+      var gain = this.audioCtx.createGain();
+      oscillator.type = 'sawtooth';
+      oscillator.frequency.setValueAtTime(getFrequency(note + octave.toString()), this.audioCtx.currentTime);
+      oscillator.connect(gain);
+      gain.gain.value = 0.001;
+      gain.connect(output);
+      oscillator.start();
+      this.oscillators.push(oscillator);
+      this.gains.push(gain);
+      gain.gain.exponentialRampToValueAtTime(0.001 + intensity, this.audioCtx.currentTime + 5);
+    }
+  }
 
   update(normX, normY, intensity) {
     while(this.gains.length) {
       const gain = this.gains.shift();
       const oscillator = this.oscillators.shift();
-      gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 1);
-      oscillator.stop();
-      oscillator.disconnect();
-      gain.disconnect();
+      gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 5);
+      window.setTimeout(function() {
+        oscillator.stop();
+        oscillator.disconnect();
+        gain.disconnect();
+      }, 5000);
     }
     //const angle = Math.atan((normY-0.5)/(normX-0.5));
     //const r = Math.sqrt(Math.pow(normX, 2) + Math.pow(normY, 2));
@@ -77,68 +95,28 @@ export class Drone {
     const chord1Mix = scalePosition - Math.floor(scalePosition);
     const chord2 = Math.ceil(scalePosition);
     const chord2Mix = 1 - chord1Mix;
-    const minorMix = normY;
+    const minorMix = Math.exp(Math.E * (normY - 1));
     const majorMix = 1 - normY;
-
-    for(const i in MAJOR_CHORDS[MAJOR_CYCLE[chord1]]) {
-      const note = MAJOR_CHORDS[MAJOR_CYCLE[chord1]][i];
-      var oscillator = this.audioCtx.createOscillator();
-      var gain = this.audioCtx.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(getFrequency(note + '4'), this.audioCtx.currentTime);
-      oscillator.connect(gain);
-      gain.gain.value = 0.001;
-      gain.connect(this.audioCtx.destination);
-      oscillator.start();
-      this.oscillators.push(oscillator);
-      this.gains.push(gain);
-      gain.gain.exponentialRampToValueAtTime(chord1Mix * majorMix * intensity, this.audioCtx.currentTime + 1);
+    const filter = this.audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.q =  0.7;
+    filter.freq = 7000 + 1000 * intensity;
+    const lfo = this.audioCtx.createOscillator();
+    lfo.type = 'sine';
+    lfo.frequency.setValueAtTime(0.5, this.audioCtx.currentTime);
+    const lfoGain = this.audioCtx.createGain();
+    lfoGain.gain.value = 1200;
+    lfo.connect(lfoGain);
+    lfoGain.connect(filter.detune);
+    filter.connect(this.audioCtx.destination);
+    if(majorMix > 0.5) {
+      this._makeOscillators(MAJOR_CHORDS[MAJOR_CYCLE[chord1]], chord1Mix * majorMix * intensity, 2,  filter);
+    } else {
+      this._makeOscillators(MINOR_CHORDS[MINOR_CYCLE[chord1]], chord1Mix * minorMix * intensity, 2, filter);
     }
-
-    for(const i in MINOR_CHORDS[MINOR_CYCLE[chord1]]) {
-      const note = MINOR_CHORDS[MINOR_CYCLE[chord1]][i];
-      var oscillator = this.audioCtx.createOscillator();
-      var gain = this.audioCtx.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(getFrequency(note + '3'), this.audioCtx.currentTime);
-      oscillator.connect(gain);
-      gain.gain.value = 0.001;
-      gain.connect(this.audioCtx.destination);
-      oscillator.start();
-      this.oscillators.push(oscillator);
-      this.gains.push(gain);
-      gain.gain.exponentialRampToValueAtTime(chord1Mix * minorMix * intensity, this.audioCtx.currentTime + 1);
-    }
-
-    for(const i in MAJOR_CHORDS[MAJOR_CYCLE[chord2]]) {
-      const note = MAJOR_CHORDS[MAJOR_CYCLE[chord2]][i];
-      var oscillator = this.audioCtx.createOscillator();
-      var gain = this.audioCtx.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(getFrequency(note + '4'), this.audioCtx.currentTime);
-      oscillator.connect(gain);
-      gain.gain.value = 0.001;
-      gain.connect(this.audioCtx.destination);
-      oscillator.start();
-      this.oscillators.push(oscillator);
-      this.gains.push(gain);
-      gain.gain.exponentialRampToValueAtTime(chord2Mix * majorMix * intensity, this.audioCtx.currentTime + 1);
-    }
-
-    for(const i in MINOR_CHORDS[MINOR_CYCLE[chord2]]) {
-      const note = MINOR_CHORDS[MINOR_CYCLE[chord2]][i];
-      var oscillator = this.audioCtx.createOscillator();
-      var gain = this.audioCtx.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(getFrequency(note + '3'), this.audioCtx.currentTime);
-      oscillator.connect(gain);
-      gain.gain.value = 0.001;
-      gain.connect(this.audioCtx.destination);
-      oscillator.start();
-      gain.gain.exponentialRampToValueAtTime(chord2Mix * minorMix * intensity, this.audioCtx.currentTime + 1);
-      this.oscillators.push(oscillator);
-      this.gains.push(gain);
-    }
-
+    this._makeOscillators(MAJOR_CHORDS[MAJOR_CYCLE[chord1]], chord1Mix * majorMix * intensity, 4,  filter);
+    this._makeOscillators(MINOR_CHORDS[MINOR_CYCLE[chord1]], chord1Mix * minorMix * intensity, 3,  filter);
+    //this._makeOscillators(MAJOR_CHORDS[MAJOR_CYCLE[chord2]], chord2Mix * majorMix * intensity, 5,  filter);
+    //this._makeOscillators(MINOR_CHORDS[MINOR_CYCLE[chord2]], chord2Mix * minorMix * intensity, 6, filter);
   }
 }
