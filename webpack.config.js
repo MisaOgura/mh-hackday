@@ -11,11 +11,11 @@ const extractTextPluginOptions = {
 }
 
 const plugins = [
-  new CleanWebpackPlugin(['build/js'], {
+  new CleanWebpackPlugin(['public/*'], {
     verbose: true
   }),
   new HtmlWebpackPlugin({
-    template: path.join(__dirname, 'public/index.html'),
+    template: path.join(__dirname, 'src/index.html'),
     inject: 'body',
     minify: {
       removeComments: true,
@@ -33,21 +33,21 @@ const plugins = [
   new ExtractTextPlugin({
     filename: cssFilename
   }),
-  new CopyWebpackPlugin([{ from: 'public/assets', to: 'static/assets' }])
+  new CopyWebpackPlugin([{ from: 'src/assets', to: 'static/assets' }])
 ]
 
 module.exports = {
   devtool: 'eval-source-map',
   devServer: {
     historyApiFallback: true,
-    contentBase: path.join(__dirname, 'public')
+    contentBase: path.join(__dirname, 'src')
   },
-  entry: ['babel-polyfill', './src/client'],
+  entry: ['babel-polyfill', './src'],
   output: {
     libraryTarget: 'umd',
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, 'public'),
     publicPath: '/'
   },
   module: {
